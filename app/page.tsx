@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronDown, Facebook, Instagram, Mail } from "lucide-react"
+import { ChevronDown, Facebook, Instagram, Mail, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect, useRef } from "react"
 import {
@@ -121,6 +121,80 @@ export default function Home() {
     { src: "/images/gallery4.jpeg", alt: "Gallery Image 4" },
     { src: "/images/soli-portrait.png", alt: "Soli Merwan Cama Portrait" },
   ]
+
+  // Define Articles Data
+  const articlesData = [
+    {
+      source: "Dainik Bhaskar UP",
+      title: "सोली मेरवान कामा का नया प्रोजेक्ट \"क्या मैं गलत?\" एसएमसी म्यूज़िक के बैनर तले कान्स में होगा प्रीमियर",
+      description: "एसएमसी म्यूज़िक के बैनर तले सोली मेरवान कामा का नया प्रोजेक्ट 'क्या मैं गलत?' कान्स में प्रीमियर के लिए तैयार है और हॉटस्टार पर रिलीज़ होगा।",
+      link: "https://dainikbhaskarup.com/soli-merwan-camas-new-project-am-i-wrong-will-premiere-in-cannes-under-the-banner-of-smc-music-will-be-released-on-hotstar/",
+      date: "Apr 17, 2025", // Placeholder date
+    },
+    {
+      source: "Mid-Day",
+      title: "Soli Merwan Cama: The Visionary Producer Redefining Bollywood's Global Footprint",
+      description: "Highlighting Soli Merwan Cama's significant impact on expanding Bollywood's reach internationally.",
+      link: "https://www.mid-day.com/amp/buzz/article/soli-merwan-cama-the-visionary-producer-redefining-bollywoods-global-footprint-5081",
+      date: "Apr 16, 2025", // Placeholder date
+    },
+    {
+      source: "First India",
+      title: "Soli Merwan Cama: The Visionary Producer Redefining Bollywood's Global Footprint",
+      description: "A press release detailing Soli Merwan Cama's influential role within the Bollywood industry globally.",
+      link: "https://firstindia.co.in/news/press-releases/soli-merwan-cama-the-visionary-producer-redefining-bollywoods-global-footprint",
+      date: "Apr 15, 2025", // Placeholder date
+    },
+    {
+      source: "Live Hindustan",
+      title: "सोली मेरवान कामा का नया प्रोजेक्ट क्या मैं गलत कान्स में होगा प्रीमियर",
+      description: "एसएमसी म्यूज़िक का प्रोजेक्ट 'क्या मैं गलत?' कान्स फिल्म फेस्टिवल 2024 में प्रीमियर के लिए तैयार है।",
+      link: "https://www.livehindustan.com/jharkhand/chaibasa/story-smc-music-s-am-i-wrong-set-to-premiere-at-cannes-film-festival-201741260525966.html",
+      date: "Apr 14, 2025", // Placeholder date
+    },
+    {
+      source: "Hindi Mid-Day",
+      title: "सोली मेरवान कामा का नया प्रोजेक्ट 'क्या मैं गलत?' एसएमसी म्यूजिक के बैनर तले कांस में होगा प्रीमियर",
+      description: "एसएमसी म्यूजिक के तहत सोली मेरवान कामा का नया प्रोजेक्ट 'क्या मैं गलत?' कांस में प्रीमियर होगा और हॉटस्टार पर रिलीज होगा।",
+      link: "https://hindi.mid-day.com/bespoke-stories/media-and-entertainment/article/soli-merwan-kamas-new-project-am-i-wrong-under-the-banner-of-smc-music-will-premiere-at-cannes-will-be-released-on-hotstar-41",
+      date: "Apr 13, 2025", // Placeholder date
+    },
+    {
+      source: "Hindi Saamana",
+      title: "'क्या मैं गलत?' कान्स में प्रीमियर के लिए तैयार",
+      description: "'क्या मैं गलत?' फिल्म कान्स फिल्म फेस्टिवल में प्रीमियर के लिए तैयार है।",
+      link: "https://www.hindisaamana.com/kya-main-galat-to-premiere-at-cannes/",
+      date: "Apr 12, 2025", // Placeholder date
+    },
+    {
+      source: "Filmy Town",
+      title: "Soli Merwan Cama's music 'Kya Main Galat' under SMC Music's banner to premiere at Cannes, releasing on Hotstar!",
+      description: "Details on the Cannes premiere and Hotstar release for Soli Merwan Cama's 'Kya Main Galat'.",
+      link: "https://filmytown.com/soli-merwan-camas-music-kya-main-galat-under-smc-musics-banner-to-premiere-at-cannes-releasing-on-hotstar/",
+      date: "Apr 11, 2025", // Placeholder date
+    },
+    {
+      source: "UP18 News",
+      title: "नया रिकॉर्ड बनाने के लिए तैयार है सोली मेरवान कामा का नया प्रोजेक्ट \"क्या मैं गलत?\"",
+      description: "सोली मेरवान कामा का नया प्रोजेक्ट 'क्या मैं गलत?' नया रिकॉर्ड बनाने की उम्मीद जगा रहा है।",
+      link: "https://up18news.com/solie-merwan-camas-new-project-is-ready-to-create-a-new-record-are-i-wrong/",
+      date: "Apr 10, 2025", // Placeholder date
+    },
+    {
+      source: "Forbes India",
+      title: "Soli Merwan Cama's Journey: From Dark Days To A Millionaire Dream",
+      description: "Forbes India covers the inspiring journey of Soli Merwan Cama's rise to success against the odds.",
+      link: "https://www.forbesindia.com/article/brand-connect/soli-merwan-camas-journey-from-dark-days-to-a-millionaire-dream/95740/1",
+      date: "Feb 15, 2024", // Example actual date
+    },
+    {
+      source: "Hindustan Times",
+      title: "SMC Music Company introduces 'Gold Over Love - Dilon Ka Sauda'",
+      description: "Hindustan Times reports on the launch of a new music release from SMC Music Company.",
+      link: "https://www.hindustantimes.com/genesis/smc-music-company-introduces-gold-over-love-dilon-ka-sauda-101744203797393.html",
+      date: "Apr 05, 2024", // Example actual date
+    }
+  ];
 
   const sectionIds = ["home", "about", "articles", "company", "contact"]
 
@@ -662,10 +736,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Articles Section */}
+      {/* Articles Section - Redesigned Cards */}
       <section id="articles" className="py-24 bg-gray-900">
         <div className="container mx-auto px-4">
-          <motion.h2
+          <motion.h2 
             className="text-3xl md:text-5xl font-serif font-bold mb-6 text-center"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -674,7 +748,7 @@ export default function Home() {
           >
             <span className="text-gold">Featured</span> Articles
           </motion.h2>
-          <motion.p
+          <motion.p 
             className="text-gray-300 text-center max-w-3xl mx-auto mb-16"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -696,31 +770,31 @@ export default function Home() {
               slidesPerView={1}
               spaceBetween={30}
               loop={true}
-              pagination={{
+              pagination={{ 
                 clickable: true,
                 dynamicBullets: true,
               }}
               navigation={true}
               autoplay={{
-                delay: 3500,
+                delay: 4000, // Slightly increased delay for readability
                 disableOnInteraction: false,
               }}
               breakpoints={{
                 // when window width is >= 768px (tablet)
                 768: {
                   slidesPerView: 2,
-                  spaceBetween: 20
+                  spaceBetween: 30 // Increased space
                 },
                 // when window width is >= 1024px (desktop)
                 1024: {
                   slidesPerView: 3,
-                  spaceBetween: 30
+                  spaceBetween: 40 // Increased space
                 }
               }}
               modules={[Pagination, Autoplay, Navigation]}
-              className="mySwiper pb-12"
+              className="mySwiper pb-16" // Increased padding for pagination/nav
               style={{
-                // Swiper custom styles
+                // Swiper custom styles (same as before)
                 '--swiper-pagination-color': '#D4AF37',
                 '--swiper-pagination-bullet-inactive-color': '#999999',
                 '--swiper-pagination-bullet-inactive-opacity': '1',
@@ -730,230 +804,51 @@ export default function Home() {
                 '--swiper-navigation-size': '25px'
               } as React.CSSProperties}
             >
-              {/* Article Card 1 */}
-              <SwiperSlide>
-                <motion.div
-                  className="group h-full"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <motion.div
-                    className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col"
-                    whileHover={{
-                      boxShadow: "0px 0px 20px rgba(212,175,55,0.2)",
-                      y: -5
-                    }}
-                    transition={{ type: "spring", stiffness: 300 }}
+              {articlesData.map((article, index) => (
+                <SwiperSlide key={index}>
+                  <motion.div 
+                    className="group h-full flex flex-col"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.5, delay: index * 0.05 }} // Stagger slightly based on index
                   >
-                    <div className="relative h-56 overflow-hidden">
-                      <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Forbes Article"
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                      <motion.div
-                        className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded"
-                        initial={{ x: -20, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 }}
-                      >
-                        FORBES
-                      </motion.div>
-                    </div>
-
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="text-sm text-gold/80 mb-2">June 15, 2023</div>
-                      <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                        From Rags to Riches: The Extraordinary Journey of Soli Merwan Cama
+                    <motion.div 
+                      className="relative bg-gradient-to-br from-gray-800/30 to-gray-900/50 overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col p-6 group-hover:bg-gray-800/50"
+                      whileHover={{ 
+                        boxShadow: "0px 5px 25px rgba(212,175,55,0.15)",
+                        y: -8
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    >
+                      <div className="mb-4">
+                        <div className="text-xs uppercase tracking-wider text-gold/80 mb-1 font-medium">{article.source}</div>
+                        <div className="text-xs text-gray-400">{article.date}</div>
+                      </div>
+                      
+                      <h3 className="text-lg font-serif font-semibold mb-3 group-hover:text-gold transition-colors flex-grow">
+                        {article.title}
                       </h3>
-                      <p className="text-gray-400 mb-6 flex-grow">
-                        Forbes explores how Soli Merwan Cama transformed his life from humble beginnings to becoming one of
-                        the most inspiring entrepreneurs of our time.
+                      
+                      <p className="text-sm text-gray-400 mb-6 flex-grow line-clamp-3">
+                        {article.description}
                       </p>
+                      
                       <motion.a
-                        href="#"
-                        className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                        whileHover={{ x: 5 }}
-                        transition={{ type: "spring", stiffness: 400 }}
+                        href={article.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center text-gold border-b border-gold/0 hover:border-gold/100 transition-all pb-1 text-sm font-medium mt-auto group-hover:text-white"
+                        whileHover={{ x: 4 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
                       >
                         Read Full Article
-                        <svg
-                          className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          ></path>
-                        </svg>
+                        <ExternalLink className="w-4 h-4 ml-2" />
                       </motion.a>
-                    </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              </SwiperSlide>
-
-              {/* Article Card 2 */}
-              <SwiperSlide>
-                <div className="group h-full">
-                  <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                    <div className="relative h-56 overflow-hidden">
-                      <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Entrepreneur Magazine Article"
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                      <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                        ENTREPRENEUR
-                      </div>
-                    </div>
-
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="text-sm text-gold/80 mb-2">March 8, 2023</div>
-                      <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                        The Mindset That Builds Empires: Lessons from Soli Merwan Cama
-                      </h3>
-                      <p className="text-gray-400 mb-6 flex-grow">
-                        Entrepreneur Magazine delves into the psychological principles and mindset strategies that helped
-                        Soli overcome adversity and build his business empire.
-                      </p>
-                      <a
-                        href="#"
-                        className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                      >
-                        Read Full Article
-                        <svg
-                          className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          ></path>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-
-              {/* Article Card 3 */}
-              <SwiperSlide>
-                <div className="group h-full">
-                  <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                    <div className="relative h-56 overflow-hidden">
-                      <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Success Magazine Article"
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                      <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                        SUCCESS
-                      </div>
-                    </div>
-
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="text-sm text-gold/80 mb-2">November 22, 2022</div>
-                      <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                        Resilience Redefined: How Soli Merwan Cama Turned Setbacks into Comebacks
-                      </h3>
-                      <p className="text-gray-400 mb-6 flex-grow">
-                        Success Magazine features an exclusive interview with Soli on how he developed extraordinary
-                        resilience and his practical advice for overcoming life's greatest challenges.
-                      </p>
-                      <a
-                        href="#"
-                        className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                      >
-                        Read Full Article
-                        <svg
-                          className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          ></path>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-
-              {/* Article Card 4 (Adding an extra one for the carousel) */}
-              <SwiperSlide>
-                <div className="group h-full">
-                  <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                    <div className="relative h-56 overflow-hidden">
-                      <Image
-                        src="/placeholder.svg?height=400&width=600"
-                        alt="Business Insider Article"
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                      <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                        BUSINESS INSIDER
-                      </div>
-                    </div>
-
-                    <div className="p-6 flex flex-col flex-grow">
-                      <div className="text-sm text-gold/80 mb-2">July 30, 2023</div>
-                      <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                        Leadership Lessons from Soli Merwan Cama's Transformative Journey
-                      </h3>
-                      <p className="text-gray-400 mb-6 flex-grow">
-                        Business Insider analyzes the key leadership principles that guided Soli through his remarkable rise
-                        and how these principles can be applied in any business context.
-                      </p>
-                      <a
-                        href="#"
-                        className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                      >
-                        Read Full Article
-                        <svg
-                          className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          ></path>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </motion.div>
         </div>
