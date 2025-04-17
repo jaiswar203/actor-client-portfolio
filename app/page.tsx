@@ -4,19 +4,36 @@ import Image from "next/image"
 import Link from "next/link"
 import { ChevronDown, Facebook, Instagram, Linkedin, Mail, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useState, useEffect, useRef } from "react"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { EffectCoverflow, Pagination, Autoplay, Navigation } from 'swiper/modules'
+
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/effect-coverflow'
+import 'swiper/css/pagination'
+import 'swiper/css/autoplay'
+import 'swiper/css/navigation' // Add navigation styles
 
 export default function Home() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [activeSection, setActiveSection] = useState("home")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string | null>(null)
 
   const galleryImages = [
     { src: "/images/gallery1.png", alt: "Gallery Image 1" },
     { src: "/images/gallery2.png", alt: "Gallery Image 2" },
+    { src: "/images/gallery3.jpeg", alt: "Gallery Image 3" },
+    { src: "/images/gallery4.jpeg", alt: "Gallery Image 4" },
     { src: "/images/soli-portrait.png", alt: "Soli Merwan Cama Portrait" },
-    { src: "/images/gallery1.png", alt: "Gallery Image 1 Repeat" },
-    { src: "/images/gallery2.png", alt: "Gallery Image 2 Repeat" },
   ]
 
   const sectionIds = ["home", "about", "articles", "company", "contact"]
@@ -55,6 +72,11 @@ export default function Home() {
     }
   }, []) // Empty dependency array means this effect runs once on mount
 
+  const handleImageClick = (src: string) => {
+    setSelectedImageSrc(src)
+    setIsModalOpen(true)
+  }
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Navigation */}
@@ -74,7 +96,6 @@ export default function Home() {
               </Link>
             ))}
           </div>
-          
         </div>
       </nav>
 
@@ -129,7 +150,7 @@ export default function Home() {
             {/* Right side - Content */}
             <div className="order-1 lg:order-2 text-center lg:text-left">
               <div className="inline-block mb-4 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full">
-                <span className="text-gold text-sm font-medium">Visionary Storyteller</span>
+                <span className="text-gold text-sm font-medium">Visionary</span>
               </div>
 
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 tracking-tight">
@@ -146,7 +167,6 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                 <Button className="bg-gold hover:bg-gold/80 text-black">Discover My Story</Button>
-                
               </div>
             </div>
           </div>
@@ -232,64 +252,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gallery Section Updated */}
-      <section className="py-24 bg-gradient-to-b from-gray-900 to-black">
+      {/* Gallery Section Updated with Swiper Carousel and Dialog */}
+      <section className="py-24 bg-gradient-to-b from-gray-900 to-black overflow-hidden">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6 text-center">
             <span className="text-gold">Image</span> Gallery
           </h2>
           <p className="text-gray-300 text-center max-w-3xl mx-auto mb-16">
-            Explore visual highlights from Soli's journey and career. Click an image to view it larger.
+            Explore visual highlights from Soli's journey and career.
           </p>
 
-          {/* Gallery Grid - Updated */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5">
+          {/* Swiper Carousel */}
+          <Swiper
+            effect={'coverflow'}
+            grabCursor={true}
+            centeredSlides={true}
+            loop={true}
+            slidesPerView={1} // Default for mobile
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            }}
+            pagination={{ clickable: true }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              // when window width is >= 768px
+              768: {
+                slidesPerView: 3,
+              },
+            }}
+            modules={[EffectCoverflow, Pagination, Autoplay]}
+            className="mySwiper pb-12" // Added pb-12 for pagination spacing
+            style={{
+              // Ensure Swiper styles override any conflicting global styles
+              // @ts-ignore Need to use CSS variables for Swiper pagination color
+              '--swiper-pagination-color': '#D4AF37', // gold color
+              '--swiper-pagination-bullet-inactive-color': '#999999',
+              '--swiper-pagination-bullet-inactive-opacity': '1',
+              '--swiper-pagination-bullet-size': '10px',
+              '--swiper-pagination-bullet-horizontal-gap': '6px'
+            }}
+          >
             {galleryImages.map((image, index) => (
-              <Dialog key={index}>
-                <DialogTrigger asChild>
-                  <div
-                    className="group relative cursor-pointer overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 hover:border-gold/50 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
-                    onClick={() => setSelectedImage(image.src)}
-                  >
-                    <div className="relative aspect-square w-full overflow-hidden">
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 33vw"
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      {/* Optional: Subtle overlay on hover */}
-                      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                </DialogTrigger>
-              </Dialog>
+              <SwiperSlide key={index} className="group">
+                <div
+                  onClick={() => handleImageClick(image.src)}
+                  className="relative aspect-square w-full overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 hover:border-gold/50 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] cursor-pointer"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(max-width: 768px) 90vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
       </section>
-
-      {/* Modal for displaying selected image */}
-      <Dialog open={!!selectedImage} onOpenChange={(open) => !open && setSelectedImage(null)}>
-        <DialogContent className="sm:max-w-[80vw] max-h-[80vh] bg-black border-gold/50 p-2">
-          <DialogTitle>
-            <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6 text-center">
-              <span className="text-gold">Image</span> Gallery
-            </h2>
-          </DialogTitle>
-          {selectedImage && (
-            <div className="relative w-full h-[55vh]"> {/* Adjust height as needed */}
-              <Image
-                src={selectedImage}
-                alt="Selected gallery image"
-                fill
-                className="object-contain"
-              />
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
 
       {/* Articles Section */}
       <section id="articles" className="py-24 bg-gray-900">
@@ -302,160 +330,249 @@ export default function Home() {
             features.
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Swiper Carousel for Articles */}
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={30}
+            loop={true}
+            pagination={{ 
+              clickable: true,
+              dynamicBullets: true,
+            }}
+            navigation={true}
+            autoplay={{
+              delay: 3500,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              // when window width is >= 768px (tablet)
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20
+              },
+              // when window width is >= 1024px (desktop)
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 30
+              }
+            }}
+            modules={[Pagination, Autoplay, Navigation]}
+            className="mySwiper pb-12"
+            style={{
+              // Swiper custom styles
+              '--swiper-pagination-color': '#D4AF37',
+              '--swiper-pagination-bullet-inactive-color': '#999999',
+              '--swiper-pagination-bullet-inactive-opacity': '1',
+              '--swiper-pagination-bullet-size': '10px',
+              '--swiper-pagination-bullet-horizontal-gap': '6px',
+              '--swiper-navigation-color': '#D4AF37',
+              '--swiper-navigation-size': '25px'
+            } as React.CSSProperties}
+          >
             {/* Article Card 1 */}
-            <div className="group">
-              <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src="/placeholder.svg?height=400&width=600"
-                    alt="Forbes Article"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                  <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                    FORBES
+            <SwiperSlide>
+              <div className="group h-full">
+                <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Forbes Article"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                    <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
+                      FORBES
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="text-sm text-gold/80 mb-2">June 15, 2023</div>
+                    <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
+                      From Rags to Riches: The Extraordinary Journey of Soli Merwan Cama
+                    </h3>
+                    <p className="text-gray-400 mb-6 flex-grow">
+                      Forbes explores how Soli Merwan Cama transformed his life from humble beginnings to becoming one of
+                      the most inspiring entrepreneurs of our time.
+                    </p>
+                    <a
+                      href="#"
+                      className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
+                    >
+                      Read Full Article
+                      <svg
+                        className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </a>
                   </div>
                 </div>
-
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="text-sm text-gold/80 mb-2">June 15, 2023</div>
-                  <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                    From Rags to Riches: The Extraordinary Journey of Soli Merwan Cama
-                  </h3>
-                  <p className="text-gray-400 mb-6 flex-grow">
-                    Forbes explores how Soli Merwan Cama transformed his life from humble beginnings to becoming one of
-                    the most inspiring entrepreneurs of our time.
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                  >
-                    Read Full Article
-                    <svg
-                      className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </a>
-                </div>
               </div>
-            </div>
+            </SwiperSlide>
 
             {/* Article Card 2 */}
-            <div className="group">
-              <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src="/placeholder.svg?height=400&width=600"
-                    alt="Entrepreneur Magazine Article"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                  <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                    ENTREPRENEUR
+            <SwiperSlide>
+              <div className="group h-full">
+                <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Entrepreneur Magazine Article"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                    <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
+                      ENTREPRENEUR
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="text-sm text-gold/80 mb-2">March 8, 2023</div>
+                    <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
+                      The Mindset That Builds Empires: Lessons from Soli Merwan Cama
+                    </h3>
+                    <p className="text-gray-400 mb-6 flex-grow">
+                      Entrepreneur Magazine delves into the psychological principles and mindset strategies that helped
+                      Soli overcome adversity and build his business empire.
+                    </p>
+                    <a
+                      href="#"
+                      className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
+                    >
+                      Read Full Article
+                      <svg
+                        className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </a>
                   </div>
                 </div>
-
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="text-sm text-gold/80 mb-2">March 8, 2023</div>
-                  <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                    The Mindset That Builds Empires: Lessons from Soli Merwan Cama
-                  </h3>
-                  <p className="text-gray-400 mb-6 flex-grow">
-                    Entrepreneur Magazine delves into the psychological principles and mindset strategies that helped
-                    Soli overcome adversity and build his business empire.
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                  >
-                    Read Full Article
-                    <svg
-                      className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </a>
-                </div>
               </div>
-            </div>
+            </SwiperSlide>
 
             {/* Article Card 3 */}
-            <div className="group">
-              <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
-                <div className="relative h-56 overflow-hidden">
-                  <Image
-                    src="/placeholder.svg?height=400&width=600"
-                    alt="Success Magazine Article"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                  <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
-                    SUCCESS
+            <SwiperSlide>
+              <div className="group h-full">
+                <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Success Magazine Article"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                    <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
+                      SUCCESS
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="text-sm text-gold/80 mb-2">November 22, 2022</div>
+                    <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
+                      Resilience Redefined: How Soli Merwan Cama Turned Setbacks into Comebacks
+                    </h3>
+                    <p className="text-gray-400 mb-6 flex-grow">
+                      Success Magazine features an exclusive interview with Soli on how he developed extraordinary
+                      resilience and his practical advice for overcoming life's greatest challenges.
+                    </p>
+                    <a
+                      href="#"
+                      className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
+                    >
+                      Read Full Article
+                      <svg
+                        className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </a>
                   </div>
                 </div>
+              </div>
+            </SwiperSlide>
+            
+            {/* Article Card 4 (Adding an extra one for the carousel) */}
+            <SwiperSlide>
+              <div className="group h-full">
+                <div className="relative overflow-hidden rounded-lg border border-gold/20 transition-all duration-300 group-hover:border-gold/50 h-full flex flex-col">
+                  <div className="relative h-56 overflow-hidden">
+                    <Image
+                      src="/placeholder.svg?height=400&width=600"
+                      alt="Business Insider Article"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                    <div className="absolute top-4 left-4 bg-gold/90 text-black text-xs font-bold px-3 py-1 rounded">
+                      BUSINESS INSIDER
+                    </div>
+                  </div>
 
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="text-sm text-gold/80 mb-2">November 22, 2022</div>
-                  <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
-                    Resilience Redefined: How Soli Merwan Cama Turned Setbacks into Comebacks
-                  </h3>
-                  <p className="text-gray-400 mb-6 flex-grow">
-                    Success Magazine features an exclusive interview with Soli on how he developed extraordinary
-                    resilience and his practical advice for overcoming life's greatest challenges.
-                  </p>
-                  <a
-                    href="#"
-                    className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
-                  >
-                    Read Full Article
-                    <svg
-                      className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="p-6 flex flex-col flex-grow">
+                    <div className="text-sm text-gold/80 mb-2">July 30, 2023</div>
+                    <h3 className="text-xl font-serif font-bold mb-3 group-hover:text-gold transition-colors">
+                      Leadership Lessons from Soli Merwan Cama's Transformative Journey
+                    </h3>
+                    <p className="text-gray-400 mb-6 flex-grow">
+                      Business Insider analyzes the key leadership principles that guided Soli through his remarkable rise 
+                      and how these principles can be applied in any business context.
+                    </p>
+                    <a
+                      href="#"
+                      className="inline-flex items-center text-gold border-b border-gold/0 group-hover:border-gold/100 transition-all pb-1 text-sm font-medium"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      ></path>
-                    </svg>
-                  </a>
+                      Read Full Article
+                      <svg
+                        className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div className="mt-16 text-center">
-            <Button variant="outline" className="border-gold text-gold hover:bg-gold/10">
-              View All Articles
-            </Button>
-          </div>
+            </SwiperSlide>
+          </Swiper>
         </div>
       </section>
 
@@ -607,7 +724,7 @@ export default function Home() {
               <Instagram size={22} />
             </a>
           </div>
-          <div className="flex justify-center gap-6 mb-8 text-sm uppercase tracking-widest">
+          <div className="flex justify-center gap-6 mb-8 text-sm uppercase tracking-widest flex-wrap">
             <Link href="#home" className="text-gray-400 hover:text-gold transition-colors">Home</Link>
             <Link href="#about" className="text-gray-400 hover:text-gold transition-colors">About</Link>
             <Link href="#articles" className="text-gray-400 hover:text-gold transition-colors">Articles</Link>
@@ -615,10 +732,27 @@ export default function Home() {
             <Link href="#contact" className="text-gray-400 hover:text-gold transition-colors">Contact</Link>
           </div>
           <p className="text-gray-500 text-xs">
-            &copy; {new Date().getFullYear()} Soli Merwan Cama. All rights reserved. Website by [Your Name/Company Optional]
+            &copy; {new Date().getFullYear()} Soli Merwan Cama. All rights reserved. Website by <a href="https://jaiswar.vercel.app" className="underline" target="_blank">Nilesh Jaiswar</a>
           </p>
         </div>
       </footer>
+
+      {/* Dialog for Image Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] xl:max-w-[50vw] bg-black border-gold/50 p-2">
+        <DialogTitle></DialogTitle>
+          {selectedImageSrc && (
+            <div className="relative w-full aspect-[4/3]"> {/* Adjust aspect ratio as needed */}
+              <Image
+                src={selectedImageSrc}
+                alt="Selected Gallery Image"
+                fill
+                className="object-contain rounded-md"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
