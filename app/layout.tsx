@@ -14,14 +14,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Soli Merwan Cama | Actor & Entrepreneur",
     description: "From struggle to success - the inspiring journey of Soli Merwan Cama",
-    images: [
-      {
-        url: "/soli-portrait.png", // Make sure this image is in the /public folder
-        width: 1200, // Standard OG image width
-        height: 630, // Standard OG image height
-        alt: "Soli Merwan Cama Portrait",
-      },
-    ],
     type: "website",
   },
   icons: {
