@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #d4af37;
+  --gold-light: #e5c158;
+  --gold-dark: #b3941f;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.text-gold {
+  color: var(--gold);
+}
+
+.bg-gold {
+  background-color: var(--gold);
+}
+
+.border-gold {
+  border-color: var(--gold);
+}
