@@ -4,7 +4,6 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -61,9 +60,6 @@ export default function RootLayout({
                   Contact
                 </Link>
               </div>
-              <Button variant="outline" className="border-gold text-gold hover:bg-gold/10">
-                Connect
-              </Button>
             </div>
           </nav>
           {children}
