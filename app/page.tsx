@@ -1209,7 +1209,7 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.6 }}
           >
-            &copy; {new Date().getFullYear()} Soli Merwan Cama. All rights reserved. Website by <a href="https://jaiswar.vercel.app" className="underline" target="_blank">Nilesh Jaiswar</a>
+            &copy; {new Date().getFullYear()} Soli Merwan Cama. All rights reserved.
           </motion.p>
         </div>
       </motion.footer>
