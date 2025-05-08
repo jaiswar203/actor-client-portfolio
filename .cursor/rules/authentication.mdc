@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Admin Authentication
+
+Authentication for the admin dashboard (`/admin/*`) is handled via server-side logic using environment variables and cookies.
+
+## Core Logic
+
+*   The authentication functions (`login`, `logout`, `isAuthenticated`, `requireAuth`) are defined in [lib/auth.ts](mdc:lib/auth.ts).
+*   Login credentials (`ADMIN_EMAIL`, `ADMIN_PASSWORD`) are read from environment variables (likely defined in `.env.local`).
+
+## Session Management
+
+*   Upon successful login, a session cookie named `admin-session` is set using `cookies()` from `next/headers`.
+*   This cookie is checked by `isAuthenticated` and `requireAuth` to protect admin routes.
+*   The `logout` function removes this cookie.
+
+## Important Notes
+
+*   The functions in [lib/auth.ts](mdc:lib/auth.ts) are designed to be used in Server Actions or Route Handlers.
+*   Recent changes required adding `async/await` to the `cookies()` calls due to potential Next.js version updates or type mismatches.
+

@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
+import { createContext, useContext, useEffect, useRef, useState } from "react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -26,25 +27,60 @@ const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-type SidebarContext = {
-  state: "expanded" | "collapsed"
+const SidebarContext = createContext<{
   open: boolean
-  setOpen: (open: boolean) => void
-  openMobile: boolean
-  setOpenMobile: (open: boolean) => void
-  isMobile: boolean
-  toggleSidebar: () => void
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}>({
+  open: false,
+  setOpen: () => {},
+})
+
+interface SidebarProviderProps {
+  children: React.ReactNode
 }
 
-const SidebarContext = React.createContext<SidebarContext | null>(null)
+export function SidebarProvider({ children }: SidebarProviderProps) {
+  const [open, setOpen] = useState(true)
 
-function useSidebar() {
-  const context = React.useContext(SidebarContext)
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider.")
-  }
+  return (
+    <SidebarContext.Provider value={{ open, setOpen }}>
+      <div className="flex">
+        {children}
+      </div>
+    </SidebarContext.Provider>
+  )
+}
 
-  return context
+export function useSidebar() {
+  return useContext(SidebarContext)
+}
+
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "inset"
+}
+
+export function SidebarInset({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  const { open } = useSidebar()
+
+  return (
+    <div className="flex-1 overflow-auto">
+      {children}
+    </div>
+  )
+}
+
+export function SidebarTrigger() {
+  const { open, setOpen } = useSidebar()
+
+  return (
+    <button
+      className="sidebar-trigger"
+      onClick={() => setOpen(!open)}
+      data-open={open}
+    >
+      <span className="sr-only">Toggle sidebar</span>
+    </button>
+  )
 }
 
 const SidebarProvider = React.forwardRef<
@@ -116,17 +152,12 @@ const SidebarProvider = React.forwardRef<
     // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? "expanded" : "collapsed"
 
-    const contextValue = React.useMemo<SidebarContext>(
+    const contextValue = React.useMemo<{ open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }>(
       () => ({
-        state,
         open,
         setOpen,
-        isMobile,
-        openMobile,
-        setOpenMobile,
-        toggleSidebar,
       }),
-      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+      [open, setOpen]
     )
 
     return (
@@ -258,32 +289,6 @@ const Sidebar = React.forwardRef<
   }
 )
 Sidebar.displayName = "Sidebar"
-
-const SidebarTrigger = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
-
-  return (
-    <Button
-      ref={ref}
-      data-sidebar="trigger"
-      variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
-  )
-})
-SidebarTrigger.displayName = "SidebarTrigger"
 
 const SidebarRail = React.forwardRef<
   HTMLButtonElement,

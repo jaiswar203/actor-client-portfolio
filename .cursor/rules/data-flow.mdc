@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Data Flow (Gallery & Articles)
+
+Data for gallery images and articles is managed via MongoDB and accessed through API routes and React Query.
+
+## Database & Models
+
+*   MongoDB connection is handled by [lib/mongodb.ts](mdc:lib/mongodb.ts).
+*   Database interaction functions (CRUD operations) are defined in [lib/db.ts](mdc:lib/db.ts).
+*   TypeScript interfaces for data structures (`GalleryImage`, `Article`) are in [lib/models.ts](mdc:lib/models.ts).
+*   A seed script [scripts/seed.ts](mdc:scripts/seed.ts) is available to populate the database with initial data (run via `npm run db:seed`).
+
+## API Routes
+
+*   `/api/gallery`: Handles CRUD operations for gallery images.
+*   `/api/articles`: Handles CRUD operations for articles.
+    *   *Note: The exact file paths for these API routes (e.g., `app/api/gallery/route.ts`) were part of the setup but might not be explicitly shown in recent history.*
+
+## Client-Side Fetching
+
+*   **React Query:** Used for client-side data fetching, caching, and state management.
+    *   The global provider is set up in [app/layout.tsx](mdc:app/layout.tsx) using [components/providers/query-provider.tsx](mdc:components/providers/query-provider.tsx).
+    *   Custom hooks for fetching data (`useGalleryImages`, `useArticles`) are defined in [hooks/use-api.ts](mdc:hooks/use-api.ts). These hooks fetch data from the API endpoints.
+*   **Usage:** Components like the main page ([app/page.tsx](mdc:app/page.tsx)) and admin dashboard components use these hooks to get data.
+

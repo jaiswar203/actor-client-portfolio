@@ -1,11 +1,14 @@
-import type React from "react"
-import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import Link from "next/link"
+import "./globals.css"
+import { Inter, Playfair_Display } from "next/font/google"
+import ClientLayout from "./client-layout"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  weight: ["400", "500", "600", "700", "800"],
+})
 
 export const metadata: Metadata = {
   title: "Soli Merwan Cama | Actor & Entrepreneur",
@@ -16,58 +19,16 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/favicon.ico", // Updated path to the favicon in the /app folder
+    icon: "/favicon.ico",
   },
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {/* Update the navigation to include the Articles section link */}
-          <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-gold/20">
-            <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-              <Link href="/" className="text-2xl font-serif text-gold">
-                Soli Merwan Cama
-              </Link>
-              <div className="hidden md:flex items-center space-x-8">
-                <Link href="#home" className="text-sm uppercase tracking-widest hover:text-gold transition-colors">
-                  Home
-                </Link>
-                <Link href="#about" className="text-sm uppercase tracking-widest hover:text-gold transition-colors">
-                  About
-                </Link>
-                <Link href="#articles" className="text-sm uppercase tracking-widest hover:text-gold transition-colors">
-                  Articles
-                </Link>
-                <Link href="#company" className="text-sm uppercase tracking-widest hover:text-gold transition-colors">
-                  Company
-                </Link>
-                <Link href="#contact" className="text-sm uppercase tracking-widest hover:text-gold transition-colors">
-                  Contact
-                </Link>
-              </div>
-            </div>
-          </nav>
-          {children}
-        </ThemeProvider>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning={true}>
+      <body className="bg-cream-50 text-charcoal-800 font-sans antialiased">
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   )
 }
-
-
-import './globals.css'

@@ -1,0 +1,25 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure
+
+This Next.js project uses App Router with route groups to separate concerns:
+
+*   `(site)`: Contains public-facing pages and layouts.
+    *   The main site page is [app/page.tsx](mdc:app/page.tsx).
+*   `(admin)`: Contains password-protected admin dashboard pages and layout.
+    *   The admin area layout is defined in [app/(admin)/layout.tsx](mdc:app/(admin)/layout.tsx).
+
+## Key Layouts
+
+*   **Root Layout:** [app/layout.tsx](mdc:app/layout.tsx) wraps the entire application. It includes global styles, fonts, the main navigation bar, `ThemeProvider` from `next-themes`, and the global `QueryProvider` from `@tanstack/react-query`.
+*   **Admin Layout:** [app/(admin)/layout.tsx](mdc:app/(admin)/layout.tsx) specifically wraps the admin section, providing structure and potentially admin-specific UI elements like a sidebar (though the current implementation just wraps children in `ThemeProvider` and includes `Toaster`).
+
+## Styling
+
+*   Tailwind CSS is used for styling, configured in [tailwind.config.ts](mdc:tailwind.config.ts).
+*   Global styles are defined in [app/globals.css](mdc:app/globals.css).
+*   ShadCN UI components ([components/ui](mdc:components/ui)) are used throughout the application.
+
